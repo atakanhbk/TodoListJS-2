@@ -20,11 +20,13 @@ function ControlStyle() {
   row.style.display = "flex";
   row.style.justifyContent = "center";
 
-  showTaskCards.className = "task-card-list";
+  showTaskCards.className = "show-task-cards-list";
   showTaskCards.style.display = "flex";
   showTaskCards.style.flexWrap = "wrap";
   showTaskCards.style.gap = "20px";
   showTaskCards.style.marginTop = "20px";
+  showTaskCards.style.justifyContent = "center"
+  
 
   createTaskCard.className = "create-task-card";
   createTaskCard.style.border = "2px solid black";
