@@ -68,11 +68,16 @@ function AppendChild() {
 function AddEventListener() {
   taskCreateButton.addEventListener("click", function () {
     if(taskTitleInput.value != "" && taskDescInput.value != ""){
+        taskTitleInput.style.border ="1px solid black";
+        taskDescInput.style.border ="1px solid black";
+      
         CreateTask(taskTitleInput.value, taskDescInput.value);
         taskTitleInput.value="";
         taskDescInput.value="";
     }
     else{
+        taskTitleInput.style.border ="1px solid red";
+        taskDescInput.style.border ="1px solid red";
         alert("Please Fill The Blanks");
     }
   });
