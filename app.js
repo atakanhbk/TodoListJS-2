@@ -1,5 +1,6 @@
 const container = document.createElement("div");
 const row = document.createElement("div");
+const form = document.createElement("form");
 const createTaskCard = document.createElement("div");
 const taskCardList = document.createElement("div");
 
@@ -57,7 +58,8 @@ function AppendChild() {
   document.body.appendChild(container);
   container.appendChild(row);
   container.appendChild(taskCardList);
-  row.appendChild(createTaskCard);
+  row.appendChild(form);
+  form.appendChild(createTaskCard);
   createTaskCard.appendChild(taskTitleText);
   createTaskCard.appendChild(taskTitleInput);
   createTaskCard.appendChild(taskDescText);
@@ -67,19 +69,19 @@ function AppendChild() {
 
 function AddEventListener() {
   taskCreateButton.addEventListener("click", function () {
-    if(taskTitleInput.value != "" && taskDescInput.value != ""){
-        taskTitleInput.style.border ="1px solid black";
-        taskDescInput.style.border ="1px solid black";
-      
-        CreateTask(taskTitleInput.value, taskDescInput.value);
-        taskTitleInput.value="";
-        taskDescInput.value="";
+    if (taskTitleInput.value != "" && taskDescInput.value != "") {
+      CreateTask(taskTitleInput.value, taskDescInput.value);
+      taskTitleInput.value = "";
+      taskDescInput.value = "";
+    } else {
+      taskDescInput.setAttribute("required", "required");
+      taskTitleInput.setAttribute("required", "required");
+      alert("Please Fill The Blanks");
     }
-    else{
-        taskTitleInput.style.border ="1px solid red";
-        taskDescInput.style.border ="1px solid red";
-        alert("Please Fill The Blanks");
-    }
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
   });
 }
 
@@ -98,7 +100,7 @@ function TaskCard(toDoInfo) {
 
   const input = fakeDiv.querySelector("input");
   const textarea = fakeDiv.querySelector("textarea");
-  const button = fakeDiv.querySelector("button");
+  const createButton = fakeDiv.querySelector("button");
 
   const titleText = document.createElement("h3");
   titleText.style.margin = "0px";
@@ -107,17 +109,31 @@ function TaskCard(toDoInfo) {
   const titleDesc = document.createElement("h3");
   titleDesc.style.margin = "0px";
   titleDesc.style.color = "blue";
+  titleDesc.style.marginBottom = "15px";
+
+  const deleteButton = document.createElement("button");
+  deleteButton.innerHTML = "Delete";
+  deleteButton.style.backgroundColor = "red";
+  deleteButton.style.color = "White";
+  deleteButton.style.border = "1px solid black";
+  deleteButton.style.borderRadius = "5px";
+  
+  deleteButton.addEventListener("click",() => DeleteTask(deleteButton));
 
   fakeDiv.replaceChild(titleText, input);
   fakeDiv.replaceChild(titleDesc, textarea);
+  fakeDiv.replaceChild(deleteButton,createButton);
   titleText.innerHTML = `${toDoInfo.taskTitle}`;
   titleDesc.innerHTML = `${toDoInfo.taskDesc}`;
 
   input.remove();
 
-  console.log(titleText);
-
   taskCardList.appendChild(fakeDiv);
+}
+
+function DeleteTask(button) {
+    const buttonParent =  button.parentElement;
+    buttonParent.remove();
 }
 
 AppendChild();
