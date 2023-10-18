@@ -34,6 +34,7 @@ function ControlStyle() {
   createTaskCard.style.flexDirection = "column";
   createTaskCard.style.justifyItems = "center";
   createTaskCard.style.alignItems = "center";
+  createTaskCard.style.padding = "5px";
 
   taskCreateButton.innerHTML = "Create";
   taskCreateButton.className = "task-create-button";
@@ -52,6 +53,7 @@ function ControlStyle() {
   taskDescInput.className = "task-desc-input";
 
   taskTitleInput.className = "task-title-input";
+  taskTitleInput.maxLength = "45";
 }
 
 function AppendChild() {
@@ -69,7 +71,7 @@ function AppendChild() {
 
 function AddEventListener() {
   taskCreateButton.addEventListener("click", function () {
-    if (taskTitleInput.value != "" && taskDescInput.value != "") {
+    if (taskTitleInput.value.trim() != "" && taskDescInput.value.trim() != "") {
       CreateTask(taskTitleInput.value, taskDescInput.value);
       taskTitleInput.value = "";
       taskDescInput.value = "";
@@ -109,7 +111,7 @@ function TaskCard(toDoInfo) {
   const titleDesc = document.createElement("h3");
   titleDesc.style.margin = "0px";
   titleDesc.style.color = "blue";
-  titleDesc.style.marginBottom = "15px";
+  titleDesc.style.marginBottom = "5px";
 
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = "Delete";
@@ -123,8 +125,13 @@ function TaskCard(toDoInfo) {
   fakeDiv.replaceChild(titleText, input);
   fakeDiv.replaceChild(titleDesc, textarea);
   fakeDiv.replaceChild(deleteButton,createButton);
+
   titleText.innerHTML = `${toDoInfo.taskTitle}`;
+  titleText.style.wordBreak = "break-word";
+
   titleDesc.innerHTML = `${toDoInfo.taskDesc}`;
+  titleDesc.style.wordBreak = "break-word";
+ 
 
   input.remove();
 
