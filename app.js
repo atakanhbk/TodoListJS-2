@@ -19,7 +19,7 @@ function ControlStyle() {
 
   taskCardList.className = "task-card-list";
   taskCardList.style.display = "flex";
-  taskCardList.style.flexWrap =  "wrap";
+  taskCardList.style.flexWrap = "wrap";
   taskCardList.style.gap = "20px";
   taskCardList.style.marginTop = "20px";
 
@@ -67,7 +67,14 @@ function AppendChild() {
 
 function AddEventListener() {
   taskCreateButton.addEventListener("click", function () {
-    CreateTask(taskTitleInput.value, taskDescInput.value);
+    if(taskTitleInput.value != "" && taskDescInput.value != ""){
+        CreateTask(taskTitleInput.value, taskDescInput.value);
+        taskTitleInput.value="";
+        taskDescInput.value="";
+    }
+    else{
+        alert("Please Fill The Blanks");
+    }
   });
 }
 
@@ -77,16 +84,36 @@ function CreateTask(taskTitle, taskDesc) {
     taskDesc,
   };
 
-  TaskCard();
+  TaskCard(toDoInfo);
 }
 
-function TaskCard() {
+function TaskCard(toDoInfo) {
   const originialDiv = document.getElementsByClassName("create-task-card");
   const fakeDiv = originialDiv[0].cloneNode(true);
 
+  const input = fakeDiv.querySelector("input");
+  const textarea = fakeDiv.querySelector("textarea");
+  const button = fakeDiv.querySelector("button");
+
+  const titleText = document.createElement("h3");
+  titleText.style.margin = "0px";
+  titleText.style.color = "green";
+
+  const titleDesc = document.createElement("h3");
+  titleDesc.style.margin = "0px";
+  titleDesc.style.color = "blue";
+
+  fakeDiv.replaceChild(titleText, input);
+  fakeDiv.replaceChild(titleDesc, textarea);
+  titleText.innerHTML = `${toDoInfo.taskTitle}`;
+  titleDesc.innerHTML = `${toDoInfo.taskDesc}`;
+
+  input.remove();
+
+  console.log(titleText);
+
   taskCardList.appendChild(fakeDiv);
 }
-
 
 AppendChild();
 ControlStyle();
