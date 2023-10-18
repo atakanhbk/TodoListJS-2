@@ -26,7 +26,7 @@ function ControlStyle() {
   showTaskCards.style.gap = "20px";
   showTaskCards.style.marginTop = "20px";
   showTaskCards.style.justifyContent = "center"
-  
+
 
   createTaskCard.className = "create-task-card";
   createTaskCard.style.border = "2px solid black";
@@ -164,6 +164,9 @@ window.addEventListener("load",function () {
 
 function DeleteTask(button) {
   const buttonParent = button.parentElement;
+ const indexOfButtonParent = Array.from(showTaskCards.children).indexOf(buttonParent);
+ taskCardList.splice(indexOfButtonParent,1);
+
   buttonParent.remove();
 }
 
