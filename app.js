@@ -2,7 +2,7 @@ const container = document.createElement("div");
 const row = document.createElement("div");
 const form = document.createElement("form");
 const createTaskCard = document.createElement("div");
-const taskCardList = document.createElement("div");
+const showTaskCards = document.createElement("div");
 
 const taskTitleText = document.createElement("h2");
 const taskDescText = document.createElement("h2");
@@ -11,6 +11,8 @@ const taskTitleInput = document.createElement("input");
 const taskDescInput = document.createElement("textarea");
 const taskCreateButton = document.createElement("button");
 
+let taskCardList = [];
+
 function ControlStyle() {
   container.className = "container";
 
@@ -18,11 +20,11 @@ function ControlStyle() {
   row.style.display = "flex";
   row.style.justifyContent = "center";
 
-  taskCardList.className = "task-card-list";
-  taskCardList.style.display = "flex";
-  taskCardList.style.flexWrap = "wrap";
-  taskCardList.style.gap = "20px";
-  taskCardList.style.marginTop = "20px";
+  showTaskCards.className = "task-card-list";
+  showTaskCards.style.display = "flex";
+  showTaskCards.style.flexWrap = "wrap";
+  showTaskCards.style.gap = "20px";
+  showTaskCards.style.marginTop = "20px";
 
   createTaskCard.className = "create-task-card";
   createTaskCard.style.border = "2px solid black";
@@ -59,7 +61,7 @@ function ControlStyle() {
 function AppendChild() {
   document.body.appendChild(container);
   container.appendChild(row);
-  container.appendChild(taskCardList);
+  container.appendChild(showTaskCards);
   row.appendChild(form);
   form.appendChild(createTaskCard);
   createTaskCard.appendChild(taskTitleText);
@@ -88,15 +90,15 @@ function AddEventListener() {
 }
 
 function CreateTask(taskTitle, taskDesc) {
-  const toDoInfo = {
+  const taskInfo = {
     taskTitle,
     taskDesc,
   };
 
-  TaskCard(toDoInfo);
+  TaskCard(taskInfo);
 }
 
-function TaskCard(toDoInfo) {
+function TaskCard(taskInfo) {
   const originialDiv = document.getElementsByClassName("create-task-card");
   const fakeDiv = originialDiv[0].cloneNode(true);
 
@@ -111,7 +113,8 @@ function TaskCard(toDoInfo) {
   const titleDesc = document.createElement("h3");
   titleDesc.style.margin = "0px";
   titleDesc.style.color = "blue";
-  titleDesc.style.marginBottom = "5px";
+
+  fakeDiv.style.position = "relative";
 
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = "Delete";
@@ -119,28 +122,47 @@ function TaskCard(toDoInfo) {
   deleteButton.style.color = "White";
   deleteButton.style.border = "1px solid black";
   deleteButton.style.borderRadius = "5px";
-  
-  deleteButton.addEventListener("click",() => DeleteTask(deleteButton));
+  deleteButton.style.position = "absolute";
+  deleteButton.style.bottom = "7px";
+
+  deleteButton.addEventListener("click", () => DeleteTask(deleteButton));
 
   fakeDiv.replaceChild(titleText, input);
   fakeDiv.replaceChild(titleDesc, textarea);
-  fakeDiv.replaceChild(deleteButton,createButton);
+  fakeDiv.replaceChild(deleteButton, createButton);
 
-  titleText.innerHTML = `${toDoInfo.taskTitle}`;
+  titleText.innerHTML = `${taskInfo.taskTitle}`;
   titleText.style.wordBreak = "break-word";
 
-  titleDesc.innerHTML = `${toDoInfo.taskDesc}`;
+  titleDesc.innerHTML = `${taskInfo.taskDesc}`;
   titleDesc.style.wordBreak = "break-word";
- 
 
   input.remove();
 
-  taskCardList.appendChild(fakeDiv);
+  showTaskCards.appendChild(fakeDiv);
+
+  taskCardList.push(taskInfo);
+  console.log(taskCardList);
 }
 
+
+window.addEventListener("beforeunload" , function () {
+  localStorage.setItem("0",JSON.stringify(taskCardList));
+})
+
+window.addEventListener("load",function () {
+  const localStorageList = JSON.parse(localStorage.getItem("0"));
+  for (let i = 0; i < localStorageList.length; i++) {
+    
+    TaskCard(localStorageList[i]);
+    
+  }
+})
+
+
 function DeleteTask(button) {
-    const buttonParent =  button.parentElement;
-    buttonParent.remove();
+  const buttonParent = button.parentElement;
+  buttonParent.remove();
 }
 
 AppendChild();
