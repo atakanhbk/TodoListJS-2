@@ -25,8 +25,7 @@ function ControlStyle() {
   showTaskCards.style.flexWrap = "wrap";
   showTaskCards.style.gap = "20px";
   showTaskCards.style.marginTop = "20px";
-  showTaskCards.style.justifyContent = "center"
-
+  showTaskCards.style.justifyContent = "center";
 
   createTaskCard.className = "create-task-card";
   createTaskCard.style.border = "2px solid black";
@@ -79,6 +78,7 @@ function AddEventListener() {
       CreateTask(taskTitleInput.value, taskDescInput.value);
       taskTitleInput.value = "";
       taskDescInput.value = "";
+      taskTitleInput.focus();
     } else {
       taskDescInput.setAttribute("required", "required");
       taskTitleInput.setAttribute("required", "required");
@@ -147,25 +147,23 @@ function TaskCard(taskInfo) {
   console.log(taskCardList);
 }
 
+window.addEventListener("beforeunload", function () {
+  localStorage.setItem("0", JSON.stringify(taskCardList));
+});
 
-window.addEventListener("beforeunload" , function () {
-  localStorage.setItem("0",JSON.stringify(taskCardList));
-})
-
-window.addEventListener("load",function () {
+window.addEventListener("load", function () {
   const localStorageList = JSON.parse(localStorage.getItem("0"));
   for (let i = 0; i < localStorageList.length; i++) {
-    
     TaskCard(localStorageList[i]);
-    
   }
-})
-
+});
 
 function DeleteTask(button) {
   const buttonParent = button.parentElement;
- const indexOfButtonParent = Array.from(showTaskCards.children).indexOf(buttonParent);
- taskCardList.splice(indexOfButtonParent,1);
+  const indexOfButtonParent = Array.from(showTaskCards.children).indexOf(
+    buttonParent
+  );
+  taskCardList.splice(indexOfButtonParent, 1);
 
   buttonParent.remove();
 }
